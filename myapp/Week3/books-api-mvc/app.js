@@ -7,16 +7,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/books", booksController.getAllBooks);
-app.get("/books/:id", booksController.getBooksId);
-app.post("/books", booksController.createBook);
-app.put("/books/:id", booksController.updateBook);
-app.delete("/books/:id", booksController.deleteBook);
-
 const validateBook = require("./middlewares/validateBook");
 
+app.get("/books", booksController.getAllBooks);
+app.get("/books/:id", booksController.getBooksId);
 app.post("/books", validateBook, booksController.createBook);
 app.put("/books/:id", validateBook, booksController.updateBook);
+app.delete("/books/:id", booksController.deleteBook);
 
 const port = process.env.PORT || 3000;
 
