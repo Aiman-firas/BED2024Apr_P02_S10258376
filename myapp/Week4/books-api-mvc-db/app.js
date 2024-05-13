@@ -5,6 +5,9 @@ const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser"); // Import body-parser
 
 const app = express();
+
+const staticMiddleware = express.static("public"); // Path to the public folder
+
 const port = process.env.PORT || 3000; // Use environment variable or default port
 
 // Routes for GET requests (replace with appropriate routes for update and delete later)
@@ -12,13 +15,15 @@ const port = process.env.PORT || 3000; // Use environment variable or default po
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 
+app.use(staticMiddleware); // Mount the static middleware
+
+const validateBook = require("./middlewares/validateBook");
+
 app.get("/books", booksController.getAllBooks);
 app.get("/books/:id", booksController.getBookById);
 app.post("/books", validateBook, booksController.createBook); // POST for creating books (can handle JSON data)
 app.put("/books/:id", validateBook, booksController.updateBook); // PUT for updating books
 app.delete("/books/:id", booksController.deleteBook); // DELETE for deleting books
-
-const validateBook = require("./middlewares/validateBook");
 
 app.post("/books", validateBook, booksController.createBook); // POST for creating books (can handle JSON data)
 
