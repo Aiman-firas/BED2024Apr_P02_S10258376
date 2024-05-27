@@ -93,15 +93,16 @@ class User {
     const connection = await sql.connect(dbConfig);
 
     try {
-      const sqlQuery = `SELECT *
+      const query = `
+        SELECT *
         FROM Users
         WHERE username LIKE '%${searchTerm}%'
-          OR email LIKE '%${searchTerm}%'`;
+          OR email LIKE '%${searchTerm}%'
+      `;
 
-      const result = await connection.request().query(sqlQuery);
+      const result = await connection.request().query(query);
       return result.recordset;
     } catch (error) {
-      console.error(error);
       throw new Error("Error searching users"); // Or handle error differently
     } finally {
       await connection.close(); // Close connection even on errors
@@ -112,7 +113,7 @@ class User {
     const connection = await sql.connect(dbConfig);
 
     try {
-      const sqlQuery = `
+      const query = `
         SELECT u.id AS user_id, u.username, u.email, b.id AS book_id, b.title, b.author
         FROM Users u
         LEFT JOIN UserBooks ub ON ub.user_id = u.id
@@ -120,7 +121,7 @@ class User {
         ORDER BY u.username;
       `;
 
-      const result = await connection.request().query(sqlQuery);
+      const result = await connection.request().query(query);
 
       // Group users and their books
       const usersWithBooks = {};
